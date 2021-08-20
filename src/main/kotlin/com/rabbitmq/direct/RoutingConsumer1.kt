@@ -1,5 +1,7 @@
-import com.rabbitmq.client.*
-import com.rabbitmq.direct.RoutingProducer.Companion.EXCHANGE_NAME
+import com.rabbitmq.client.AMQP
+import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.DefaultConsumer
+import com.rabbitmq.client.Envelope
 import com.rabbitmq.direct.RoutingProducer.Companion.EXECUTION_ID_1
 
 fun main() {
@@ -9,10 +11,10 @@ fun main() {
 
     val connection = factory.newConnection()
     val channel = connection.createChannel()
-
-    channel.queueDeclare(EXECUTION_ID_1, true, false, true, null)
-    channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT, true, false, null)
-    channel.queueBind(EXECUTION_ID_1, EXCHANGE_NAME, EXECUTION_ID_1)
+    // Consumer will not create the queue. It assumes in this example that the queue is created by the producer.
+    // If we wanted the queue to be created by the producer or the consumer (which starts first), we need to use the
+    // complete queueDeclare syntax.
+    val queue = channel.queueDeclarePassive(EXECUTION_ID_1)
 
     println(" [*] Waiting for messages. To exit press CTRL+C")
 
@@ -28,5 +30,5 @@ fun main() {
             channel.basicAck(envelope.deliveryTag, false)
         }
     }
-    channel.basicConsume(EXECUTION_ID_1, false, consumer)
+    channel.basicConsume(queue.queue, false, consumer)
 }

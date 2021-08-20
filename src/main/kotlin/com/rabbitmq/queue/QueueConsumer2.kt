@@ -13,8 +13,10 @@ fun main() {
 
     val connection = factory.newConnection()
     val channel = connection.createChannel()
-
-    channel.queueDeclare(EXECUTION_ID_2, true, false, true, null)
+    // Consumer will not create the queue. It assumes in this example that the queue is created by the producer.
+    // If we wanted the queue to be created by the producer or the consumer (which starts first), we need to use the
+    // complete queueDeclare syntax.
+    val queue = channel.queueDeclarePassive(EXECUTION_ID_2)
     println(" [*] Waiting for messages. To exit press CTRL+C")
 
     channel.basicQos(1)
@@ -30,8 +32,7 @@ fun main() {
             println(" [x] Received '$message' with delivery tag: ${envelope.deliveryTag}")
             println(" [x] Done")
             channel.basicAck(envelope.deliveryTag, false)
-
         }
     }
-    channel.basicConsume(EXECUTION_ID_2, false, consumer)
+    channel.basicConsume(queue.queue, false, consumer)
 }
