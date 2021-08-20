@@ -11,8 +11,8 @@ import com.rabbitmq.direct.RoutingProducer.Companion.EXECUTION_ID_2
 class RoutingProducer {
     companion object {
         const val EXCHANGE_NAME = "tasks_routing"
-        const val EXECUTION_ID_1 = "exec_routing_1"
-        const val EXECUTION_ID_2 = "exec_routing_2"
+        const val EXECUTION_ID_1 = "routing_consumer_1"
+        const val EXECUTION_ID_2 = "routing_consumer_2"
     }
 }
 

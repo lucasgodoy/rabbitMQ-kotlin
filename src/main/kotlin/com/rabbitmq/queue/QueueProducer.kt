@@ -8,8 +8,8 @@ import com.rabbitmq.queue.QueueProducer.Companion.EXECUTION_ID_2
 
 class QueueProducer {
     companion object {
-        const val EXECUTION_ID_1 = "default_1"
-        const val EXECUTION_ID_2 = "default_2"
+        const val EXECUTION_ID_1 = "default_consumer_1"
+        const val EXECUTION_ID_2 = "default_consumer_2"
     }
 }
 
