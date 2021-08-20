@@ -16,7 +16,7 @@ fun main() {
     // complete queueDeclare syntax.
     val queue = channel.queueDeclarePassive(EXECUTION_ID_2)
 
-    println(" [*] Waiting for messages. To exit press CTRL+C")
+    println(" [*] Waiting for messages.")
 
     val consumer = object : DefaultConsumer(channel) {
         override fun handleDelivery(

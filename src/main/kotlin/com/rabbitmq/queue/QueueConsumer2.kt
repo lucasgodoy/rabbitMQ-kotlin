@@ -17,7 +17,7 @@ fun main() {
     // If we wanted the queue to be created by the producer or the consumer (which starts first), we need to use the
     // complete queueDeclare syntax.
     val queue = channel.queueDeclarePassive(EXECUTION_ID_2)
-    println(" [*] Waiting for messages. To exit press CTRL+C")
+    println(" [*] Waiting for messages.")
 
     channel.basicQos(1)
 

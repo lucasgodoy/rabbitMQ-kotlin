@@ -14,9 +14,9 @@ class QueueProducer {
 }
 
 private fun sendTask(executionId: String, numberOfTasks: Short, channel: Channel) {
+    channel.queueDeclare(executionId, true, false, true, null)
     for (i in 1..numberOfTasks) {
         val task = "exec_${executionId}_task_$i"
-        channel.queueDeclare(executionId, true, false, true, null)
         channel.basicPublish(
             "", // default exchange which is a generic direct exchange
             executionId,

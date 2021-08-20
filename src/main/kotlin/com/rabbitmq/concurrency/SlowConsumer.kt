@@ -1,10 +1,10 @@
-package com.rabbitmq.queue
+package com.rabbitmq.concurrency
 
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
-import com.rabbitmq.queue.QueueProducer.Companion.EXECUTION_ID_1
+import com.rabbitmq.concurrency.Producer.Companion.QUEUE_ID
 
 fun main() {
 
@@ -16,12 +16,12 @@ fun main() {
     // Consumer will not create the queue. It assumes in this example that the queue is created by the producer.
     // If we wanted the queue to be created by the producer or the consumer (which starts first), we need to use the
     // complete queueDeclare syntax.
-    val queue = channel.queueDeclarePassive(EXECUTION_ID_1)
-    println(" [*] Waiting for messages.")
+    val queue = channel.queueDeclarePassive(QUEUE_ID)
+    println(" [*] Waiting for messages. To exit press CTRL+C")
 
     channel.basicQos(1)
 
-    val consumer = object : DefaultConsumer(channel) {
+    val lazyConsumer = object : DefaultConsumer(channel) {
         override fun handleDelivery(
             consumerTag: String,
             envelope: Envelope,
@@ -29,10 +29,11 @@ fun main() {
             body: ByteArray
         ) {
             val message = String(body, charset("UTF-8"))
-            println(" [x] Received '$message' with delivery tag: ${envelope.deliveryTag}")
+            println(" [x] Consumer 2 received '$message' with delivery tag: ${envelope.deliveryTag}")
             println(" [x] Done")
             channel.basicAck(envelope.deliveryTag, false)
+            Thread.sleep(10000)
         }
     }
-    channel.basicConsume(queue.queue, false, consumer)
+    channel.basicConsume(queue.queue, false, lazyConsumer)
 }

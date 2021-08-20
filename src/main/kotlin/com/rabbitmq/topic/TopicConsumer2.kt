@@ -15,7 +15,7 @@ fun main() {
     val queue = channel.queueDeclare("topic_consumer_2", true, false, false, null)
     channel.queueBind(queue.queue, EXCHANGE_NAME, TOPIC_1)
 
-    println(" [*] Waiting for messages. To exit press CTRL+C")
+    println(" [*] Waiting for messages.")
 
     val consumer = object : DefaultConsumer(channel) {
         override fun handleDelivery(
